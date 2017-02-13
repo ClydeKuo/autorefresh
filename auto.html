@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<button onclick="test()">test</button>
+		<script>
+			var arr = [];
+			setInterval(function() {
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/53741755"));
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54137922"));
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54631321"));
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54928110"));
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54929081"));
+				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54966667"));
+			}, 7200000)
+			setInterval(function() {
+				if(arr.length > 0) {
+					for(var i = 0, len = arr.length; i < len; i++) {
+						arr[i].close()
+					}
+					arr=[];
+				}
+
+			}, 7210000)
+		</script>
+	</body>
+
+</html>
