@@ -44,25 +44,25 @@
 
 		function toSetTime(t, tt) {
 			var kk = 0;
-			
+
 			return function() {
 				clearInterval(myTimer)
-				clearInterval(myTimer2)
 				if(!kk) {
 					console.log(++kk)
 					if(t && tt) {
-						var myTimer=setInterval(function() {
+						var myTimer = setInterval(function() {
 							openWindows();
+							setTimeout(function() {
+								closeWindows()
+							}, tt * 1000);
 						}, t * 1000);
-						var myTimer2=setInterval(function() {
-							closeWindows()
-						}, tt * 1000);
+
 					}
 				}
 			}
 		}
-		var test = toSetTime(10, 16);
-		var official=toSetTime(3600, 4800);
+		var test = toSetTime(10, 6);
+		var official = toSetTime(1800, 900);
 	</script>
 
 	<body>
