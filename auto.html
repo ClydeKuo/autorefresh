@@ -4,30 +4,72 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style>
+			button {
+				width: 50%;
+				height: 200px;
+			}
+		</style>
 	</head>
-
-	<body>
-		<button onclick="test()">test</button>
-		<script>
-			var arr = [];
-			setInterval(function() {
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/53741755"));
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54137922"));
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54631321"));
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54928110"));
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54929081"));
-				arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54966667"));
-			}, 3600000)
-			setInterval(function() {
-				if(arr.length > 0) {
-					for(var i = 0, len = arr.length; i < len; i++) {
+	<script>
+		var arr = [];
+		var openWindows = function() {
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/53741755"));
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54137922"));
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54631321"));
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54928110"));
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54929081"));
+			arr.push(window.open("http://blog.csdn.net/ClydeKuo/article/details/54966667"));
+		};
+		var closeWindows = function() {
+			if(arr.length > 0) {
+				for(var i = 0, len = arr.length; i < len; i++) {
+					if(!arr[i]) {
+						openWindows();
+						return
+					} else {
 						arr[i].close()
 					}
-					arr=[];
 				}
+				arr = [];
+			}
+		};
 
-			}, 5400000)
-		</script>
+		function official() {
+			var time = 0;
+			return function() {
+
+			}
+		}
+
+		function toSetTime(t, tt) {
+			var kk = 0;
+			
+			return function() {
+				clearInterval(myTimer)
+				clearInterval(myTimer2)
+				if(!kk) {
+					console.log(++kk)
+					if(t && tt) {
+						var myTimer=setInterval(function() {
+							openWindows();
+						}, t * 1000);
+						var myTimer2=setInterval(function() {
+							closeWindows()
+						}, tt * 1000);
+					}
+				}
+			}
+		}
+		var test = toSetTime(10, 16);
+		var official=toSetTime(3600, 4800);
+	</script>
+
+	<body>
+		<button onclick="openWindows()">open</button>
+		<button onclick="closeWindows()">close</button>
+		<button onclick="test()">test</button>
+		<button onclick="official()">official</button>
 	</body>
 
 </html>
