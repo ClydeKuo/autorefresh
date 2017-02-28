@@ -8,7 +8,7 @@ setInterval(function() {
     count = count + 1;
     request(urls[co], function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log('成功' + count);
+        console.log('Article '+co+' has refreshed '+Math.ceil(count/len)+' times');
         // 每篇文章刷的次数=count/len
       }
         })
