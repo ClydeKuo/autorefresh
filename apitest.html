@@ -1,0 +1,32 @@
+<html></html>
+<script src="./CryptoJS v3.1.2/hmac-sha256.js"></script>
+<script src="./CryptoJS v3.1.2/enc-base64-min.js"></script>
+<script>
+var apikey='deead44b-8fa1-4e8b-be6c-494d7577f608'
+var apipass='A0pjbO+6VZ8W5y4+j5YH7Lf7Ei8='
+var plus="|"
+var method="GET"
+var query_path="/links?with=countries"
+var time=new Date().getTime()
+var msg=apikey+plus+method+plus+query_path+plus+time
+var hash = CryptoJS.HmacSHA256("msg", "apipass");
+var token = CryptoJS.enc.Base64.stringify(hash);
+var msgg='otoapi'+" "+msg+plus+token
+
+var request = new XMLHttpRequest();
+
+request.open('GET', 'https://api.otohits.net/links?with=countries');
+
+request.setRequestHeader('Content-Type', 'application/json');
+request.setRequestHeader('Authorization', msgg);
+request.setRequestHeader('Access-Control-Allow-Origin','XMLHttpRequest');
+request.onreadystatechange = function () {
+  if (this.readyState === 4) {
+    console.log('Status:', this.status);
+    console.log('Headers:', this.getAllResponseHeaders());
+    console.log('Body:', this.responseText);
+  }
+};
+
+request.send();
+</script>
