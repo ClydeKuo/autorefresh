@@ -77,7 +77,7 @@
             unescape(encodeURIComponent(a))), a = H(a)) : a = b ? u(unescape(encodeURIComponent(a))) : H(u(unescape(encodeURIComponent(a))));
         return a
     }
-    console.log(this)
+    // console.log(this)
     "function" == typeof define && define.amd ? define(function () {
         return x
     }) : "object" == typeof module && module.exports ? module.exports = x : y.md5 = x
@@ -86,23 +86,23 @@ var oto;
 
 (function (y) {
     var r = function () {
-        function h() {
-            console.log("22")
-        }
+        function h() {}
 
         function a(a) {
+            // debugger;
             for (var b = "", d = a.length, c = 0; c < d; c++) char = a[c], b += String.fromCharCode(char);
             return b
         }
 
         function l(a) {
-            console.log(a)
+            // console.log(a=="Date")
+            // debugger
             return eval(a)
         }
 
         function m(q) {
             K += 1;
-            console.log("22")
+            // console.log("22")
             var l = q.width;
             L += l * q.height;
             l == A[0] && (R[a(e)](q, 0, 0), q = parseInt(v / A[0]), l = v % A[0], q = R[a(f)](l, q, 1, 1), v = q == A[0] ? q[a(c)][0] + q[a(c)][1] + q[a(c)][2] : A[0] * v);
@@ -164,7 +164,8 @@ var oto;
             qa = [32, 79, 75, 33],
             ra = [32, 70, 65, 73, 76, 33],
             T = l(a([68, 97, 116, 101])),
-            sa = l(a([119, 105, 110, 100, 111, 119])),
+            sa = l(a([119, 105, 110, 100, 111, 119])),//eval("window")
+            //a([119, 105, 110, 100, 111, 119])=='window'
             P = l(a([100, 111, 99, 117, 109, 101, 110, 116])),
             W = l(a([88, 77, 76, 72, 116, 116, 112, 82, 101, 113, 117, 101, 115, 116])),
             Q = [],
@@ -175,7 +176,9 @@ var oto;
             v = 0,
             A = [256],
             p = sa[a([108, 111, 99, 97, 116, 105, 111, 110])][a([104, 114, 101, 102])][a(t)](/:\/\/(.[^/]+)/);
-        P[a([114, 101, 102, 101, 114, 114, 101, 114])][a(t)](/:\/\/(.[^/]+)/);
+            //sa["location"]["href"]["match"]
+            //window.location.href.match(/:\/\/(.[^/]+)/)
+           P[a([114, 101, 102, 101, 114, 114, 101, 114])][a(t)](/:\/\/(.[^/]+)/);
         var B = function (b) {
                 return P[a(r)](b)
             },
@@ -228,6 +231,7 @@ var oto;
             }, 1E3)
         };
         h.s = function (b, c, e) {
+            p='https://www.otohits.net/account/wfautosurf'.match(/:\/\/(.[^/]+)/)
             p ? 2 <= p[a(n)] && p[1] == a(w) &&
                 (h.l(), Q[0][a(d)](), h.wt(b), h.i(c), v = e, h.r()) : (a(n), p[1] == a(w) && (h.l(), Q[0][a(d)](), h.wt(b), h.i(c), v = e))
         };
