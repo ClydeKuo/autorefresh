@@ -32,6 +32,21 @@ var RequestVerificationToken = ''
 var SessionId = 'e5vfioamfzmlbb3ppukagrww'
 var otohitsforgery = '1sPSyyN4Dcbop52-0gGLdywUbOYcy_cncPkry-NxgDaqWoPt8p2gkswaV9wrVmdjrKLlHGnK2sA6SaBD5WIzDvX0gTkKtxeNJdUjNHEtbys1'
 // Issue the request
+var heaForgery = {
+    // 'origin':'https://www.otohits.net',
+    'Host': 'www.otohits.net',
+    'Connection': 'keep-alive',
+    // 'Cache-Control': 'max-age=0',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Upgrade-Insecure-Requests': 1,
+    // 'X-Requested-With':'XMLHttpRequest',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+    'referer': 'https://www.otohits.net/?cl=en',
+    'Accept-Encoding': 'gzip,deflate',
+    'Accept-Language': 'zh-CN,zh;q=0.8',
+    'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId,
+    'If-Modified-Since': timel
+}
 var heaIndex = {
     // 'origin':'https://www.otohits.net',
     'Host': 'www.otohits.net',
@@ -46,6 +61,21 @@ var heaIndex = {
     'Accept-Language': 'zh-CN,zh;q=0.8',
     'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
     'If-Modified-Since': timel
+}
+var heaSession = {
+    // 'origin':'https://www.otohits.net',
+    'Host': 'www.otohits.net',
+    'Connection': 'keep-alive',
+    // 'Cache-Control': 'max-age=0',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Upgrade-Insecure-Requests': 1,
+    // 'X-Requested-With':'XMLHttpRequest',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+    // 'referer': 'https://www.otohits.net/',
+    'Accept-Encoding': 'gzip,deflate',
+    'Accept-Language': 'zh-CN,zh;q=0.8',
+    // 'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
+    // 'If-Modified-Since': timel
 }
 var heaLogin = {
     'Host': 'www.otohits.net',
@@ -129,9 +159,9 @@ function requestauto() {
         if (error) {
             console.log(error)
         } else {
-            console.log('requestauto completed')
+            console.log('got surf url')
             // console.log(body)
-            console.log(JSON.parse(body).LS)
+            // console.log(JSON.parse(body).LS)
             requestID()
         }
 
@@ -147,7 +177,11 @@ function requestdashboard() {
         url: "https://www.otohits.net/account/dashboard",
         proxy: "http://127.0.0.1:8888"
     }, function (error, response, body) {
-
+        if(error){
+            console.log(error)
+        }else{
+            console.log("got dashboard")
+        }
     });
 
 }
@@ -169,7 +203,7 @@ function requestLogin() {
                 requestIndex()
             }, 900000);
         } else if (response.statusCode == 302) {
-            console.log(302)
+            console.log("already login")
             requestdashboard()
             setInterval(function () {
                 requestauto()
@@ -191,11 +225,9 @@ function requestIndex() {
         } else {
             var reg = /\<input name=\\\"__RequestVerificationToken\\\" type=\\\"hidden\\\" value=\\\"(.{108,108})\\\"/g
             RequestVerificationToken = JSON.stringify(body).match(reg)[0].split("\\")[5].substr(1)
-            console.log(RequestVerificationToken)
-            if (RequestVerificationToken) {
+            console.log("got RequestVerificationToken")
                 requestLogin()
             }
-        }
 
     });
 }
@@ -214,7 +246,29 @@ function setSessionId(){
         } else {
             // console.log(JSON.parse(response.headers))
             SessionId=response.headers["set-cookie"][0].split(";")[0].split("=")[1]
+            console.log("got SessionId")
+            setForgery()
         }
 
     });
 }
+function setForgery(){
+    request({
+        headers: heaForgery,
+        method: "GET",
+        gzip: true,
+        url: "https://www.otohits.net/account/login",
+        proxy: "http://127.0.0.1:8888" // Note the fully-qualified path to Fiddler proxy. No "https" is required, even for https connections to outside.
+    }, function (error, response, body) {
+        if (error) {
+            console.log(error)
+        } else {
+            // console.log(response.headers["set-cookie"][0].split(";")[0].split("=")[1])
+            otohitsforgery=response.headers["set-cookie"][0].split(";")[0].split("=")[1]
+            console.log("got otohitsforgery")
+            requestIndex()
+        }
+
+    });
+}
+setSessionId()
