@@ -148,7 +148,7 @@ function requestauto() {
         console.log("got securitycheck")
         console.log('body.length:' + body.length + '  validatesecuritying')
         requestOto()
-        getjs()
+        // getjs()
     } else {
         console.log('no securitycheck')
         console.log('autosurfing .... body.length:' + body.length)
@@ -182,7 +182,7 @@ function requestOto() {
         console.log('body.match(/oto\.otoc\.s\(.*\)/):' + arr)
         setTimeout(function() {
             requestVali(getParams(arr))
-        }, 20000);
+        }, 10000);
     }
   })
 }
@@ -208,7 +208,7 @@ function requestID() {
     console.log('response.statusCode:' + response.statusCode)
     console.log('security check times:'+securityTimes)
     console.log('surf completed')
-    setTimeout(requestauto,2000)
+    setTimeout(requestauto,1000)
     
   })
 }
