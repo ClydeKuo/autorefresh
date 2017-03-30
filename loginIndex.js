@@ -40,7 +40,7 @@ function apiget(header,url,callback){
       gzip: true,
       url: url,
       followRedirect: false,
-      // proxy: "http://127.0.0.1:8888"
+    //   proxy: "http://127.0.0.1:8888"
   }, function(error, response, body) {
     if(error){
       console.log(error)
@@ -56,7 +56,7 @@ function apipost(header,url,body,callback){
       gzip: true,
       url: url,
       body:body,
-      // proxy: "http://127.0.0.1:8888",
+    //   proxy: "http://127.0.0.1:8888",
       followRedirect: false,
   }, function(error, response, body) {
     if(error){
@@ -94,9 +94,6 @@ function requestLogin() {
     } else if (response.statusCode == 302) {
         console.log("already login")
         requestauto()
-        myInter=setInterval(function() {
-            requestauto()
-        }, 2000)
     }
   })
 }
@@ -150,8 +147,6 @@ function requestauto() {
     if (body.match(/autosurfsecurity/)) {
         console.log("got securitycheck")
         console.log('body.length:' + body.length + '  validatesecuritying')
-        // console.log(myInter)
-        clearInterval(myInter)
         requestOto()
         getjs()
     } else {
@@ -211,8 +206,10 @@ function requestID() {
   }
   apiget(heaID,nextUrl,function(response, body){
     console.log('response.statusCode:' + response.statusCode)
-    console.log('surf completed')
     console.log('security check times:'+securityTimes)
+    console.log('surf completed')
+    setTimeout(requestauto,2000)
+    
   })
 }
 
