@@ -166,7 +166,7 @@ var oto;
             L += l * q.height;
             debugger
             l == A[0] && (R[a(e)](q, 0, 0), q = parseInt(v / A[0]), l = v % A[0], q = R[a(f)](l, q, 1, 1), v = q == A[0] ? q[a(c)][0] + q[a(c)][1] + q[a(c)][2] : A[0] * v);
-            if (K == I[a(n)] && (h.v(a(S)), h.r(), q = (new T)[a(d)]() - M, l = L[a(g)]() + a(k) + M[a(g)]() + a(k) + q[a(g)]() + a(k) + v[a(g)](), console.log(l),l = md5(l),console.log(l), p && 2 <= p[a(n)] && p[1] == a(w))) {
+            if (K == I[a(n)] && (h.v(a(S)), h.r(),kkkk=(new T)[a(d)]() ,console.log(kkkk),q = kkkk - M, l = L[a(g)]() + a(k) + M[a(g)]() + a(k) + q[a(g)]() + a(k) + v[a(g)](), console.log(l),l = md5(l),console.log(l), p && 2 <= p[a(n)] && p[1] == a(w))) {
             //(K == 4 && (h.v(img), h.r(), q = new Date().getTime() - 1490623383, l = L["toString"]() + _ + M[toString]() + _ + q[toString]() + _ + v[toString](), l = md5(l), p && 2 <= p['length'] && p[1] == 'www.otohits.net')) {
             debugger
                 var m;
