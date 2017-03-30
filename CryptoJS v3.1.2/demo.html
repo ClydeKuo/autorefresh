@@ -1,0 +1,12 @@
+<script src="./hmac-sha256.js"></script>
+<script src="./enc-base64-min.js"></script>
+
+<script>
+var msg='deead44b-8fa1-4e8b-be6c-494d7577f608'
+var sec='A0pjbO+6VZ8W5y4+j5YH7Lf7Ei8='
+var time=new Date().getTime()
+var msgg=msg+':GET:/links:'+time
+  var hash = CryptoJS.HmacSHA256(msgg,sec);
+  var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+  console.log(msgg+':'+hashInBase64);
+</script>
