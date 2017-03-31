@@ -12,7 +12,7 @@ var SessionId = []
 var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
-var userName = ['test13669', 'test13670', 'test13671']
+var userName = ['test13669', 'test13670', 'test13671','test13672']
 function sleep(numberMillis) {
 var now = new Date();
 var exitTime = now.getTime() + numberMillis*1000;
@@ -239,7 +239,7 @@ function requestID(i) {
         console.log(userName[i][color[i]] + ' : surf completed')
         setTimeout(function() {
             requestauto(i)
-        }, 5000)
+        }, 10000)
 
     })
 }
