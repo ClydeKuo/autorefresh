@@ -3,12 +3,16 @@ var request = require('request');
 var moment = require("moment");
 var tz = require("moment-timezone")
 var fs = require('fs');
+var colors = require('colors');
 var utils = require('utility');
+var proxy = "http://127.0.0.1:8888"
+
 var RequestVerificationToken = []
 var SessionId = []
 var otohitsforgery = []
-var securityTimes=[]
-var userName=['test13669','test13670']
+var securityTimes = []
+var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
+var userName = ['test13669', 'test13670', 'test13671']
 //获取所需时间格式
 function timel() {
     var timeReg = /(AM)|(PM)/
@@ -33,258 +37,225 @@ function getParams(params) {
     return "k=" + l + '&v=' + q + "&p=" + v
 }
 //请求接口
-console.log('This platform is ' + process.platform);
-if(process.platform=='linux'){
-    function apiget(header,url,callback){
-        request({
-            headers: header,
-            method: "GET",
-            gzip: true,
-            url: url,
-            followRedirect: false,
-            // proxy: "http://127.0.0.1:8888"
-        }, function(error, response, body) {
-            if(error){
+if (process.platform == 'linux') {
+    console.log('This platform is linux:' + (process.platform == 'linux'));
+    proxy = ""
+}
+
+function apiget(header, url, callback) {
+    request({
+        headers: header,
+        method: "GET",
+        gzip: true,
+        url: url,
+        followRedirect: false,
+        proxy: proxy
+    }, function(error, response, body) {
+        if (error) {
             console.error(error)
-            setTimeout(function(){
-                apiget(header,url,callback)
-            },10000)
-            }else{
+            setTimeout(function() {
+                apiget(header, url, callback)
+            }, 10000)
+        } else {
             callback(response, body)
-            }
-        });
-    }
-    function apipost(header,url,body,callback){
-        request({
-            headers: header,
-            method: "POST",
-            gzip: true,
-            url: url,
-            body:body,
-            // proxy: "http://127.0.0.1:8888",
-            followRedirect: false,
-        }, function(error, response, body) {
-            if(error){
+        }
+    });
+}
+
+function apipost(header, url, body, callback) {
+    request({
+        headers: header,
+        method: "POST",
+        gzip: true,
+        url: url,
+        body: body,
+        proxy: proxy,
+        followRedirect: false,
+    }, function(error, response, body) {
+        if (error) {
             console.log(error)
-            setTimeout(function(){
-                apipost(header,url,body,callback)
-            },10000)
-            }else{
+            setTimeout(function() {
+                apipost(header, url, body, callback)
+            }, 10000)
+        } else {
             callback(response, body)
-            }
-        });
-    }
-}else{
-    function apiget(header,url,callback){
-        request({
-            headers: header,
-            method: "GET",
-            gzip: true,
-            url: url,
-            followRedirect: false,
-            proxy: "http://127.0.0.1:8888"
-        }, function(error, response, body) {
-            if(error){
-            console.error(error)
-            setTimeout(function(){
-                apiget(header,url,callback)
-            },10000)
-            }else{
-            callback(response, body)
-            }
-        });
-    }
-    function apipost(header,url,body,callback){
-        request({
-            headers: header,
-            method: "POST",
-            gzip: true,
-            url: url,
-            body:body,
-            proxy: "http://127.0.0.1:8888",
-            followRedirect: false,
-        }, function(error, response, body) {
-            if(error){
-            console.log(error)
-            setTimeout(function(){
-                apipost(header,url,body,callback)
-            },10000)
-            }else{
-            callback(response, body)
-            }
-        });
-    }
+        }
+    });
 }
 
 
 function requestLogin(i) {
-  var nextUrl="https://www.otohits.net/account/login"
-  var body='__RequestVerificationToken=' + RequestVerificationToken[i] + '&ReturnUrl=&Email='+userName[i]+'%40163.com&Password=asdqwe123'
-  var heaLogin = {
-      'Host': 'www.otohits.net',
-      'Connection': 'keep-alive',
-      'Cache-Control': 'max-age=0',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-      'Origin': 'https://www.otohits.net',
-      'Upgrade-Insecure-Requests': 1,
-      // 'X-Requested-With':'XMLHttpRequest',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Referer': 'https://www.otohits.net/account/login',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i] ,
-  }
-  apipost(heaLogin,nextUrl,body,function(response, body){
-    if (response.statusCode == 200) {
-        console.log(userName[i]+' : too many times:' + (body == 'Too many attempt of logins. Throttling started. You will be able to login in 15min...'))
-        setTimeout(function() {
-            requestIndex(i)
-        }, 900000);
-    } else if (response.statusCode == 302) {
-        console.log(userName[i]+ " : already login")
-        requestauto(i)
+    var nextUrl = "https://www.otohits.net/account/login"
+    var body = '__RequestVerificationToken=' + RequestVerificationToken[i] + '&ReturnUrl=&Email=' + userName[i] + '%40163.com&Password=asdqwe123'
+    var heaLogin = {
+        'Host': 'www.otohits.net',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Origin': 'https://www.otohits.net',
+        'Upgrade-Insecure-Requests': 1,
+        // 'X-Requested-With':'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Referer': 'https://www.otohits.net/account/login',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-  })
+    apipost(heaLogin, nextUrl, body, function(response, body) {
+        if (response.statusCode == 200) {
+            console.log(userName[i][color[i]] + ' : too many times:' + (body == 'Too many attempt of logins. Throttling started. You will be able to login in 15min...'))
+            setTimeout(function() {
+                requestIndex(i)
+            }, 900000);
+        } else if (response.statusCode == 302) {
+            console.log(userName[i][color[i]] + " : already login")
+            requestauto(i)
+        }
+    })
 }
-function requestVali(i,params) {
-  var heaVali = {
-      'Host': 'www.otohits.net',
-      'Connection': 'keep-alive',
-      'Content-Length': 60,
-      // 'Cache-Control': 'max-age=0',
-      'Origin': 'https://www.otohits.net',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      // 'Upgrade-Insecure-Requests': 1,
-      // 'X-Requested-With': 'XMLHttpRequest',
-      'Accept': '*/*',
-      'Referer': 'https://www.otohits.net/account/autosurfsecurity',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i] ,
-  }
-  var nextUrl="https://www.otohits.net/account/validatesecurity"
-  apipost(heaVali,nextUrl,params,function(response, body){
-    if (response.statusCode == 200) {
-        securityTimes++
-        console.log(userName[i]+' : autosurfsecurity:' + body)
-        requestauto(i)
+
+function requestVali(i, params) {
+    var heaVali = {
+        'Host': 'www.otohits.net',
+        'Connection': 'keep-alive',
+        'Content-Length': 60,
+        // 'Cache-Control': 'max-age=0',
+        'Origin': 'https://www.otohits.net',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // 'Upgrade-Insecure-Requests': 1,
+        // 'X-Requested-With': 'XMLHttpRequest',
+        'Accept': '*/*',
+        'Referer': 'https://www.otohits.net/account/autosurfsecurity',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-  })
+    var nextUrl = "https://www.otohits.net/account/validatesecurity"
+    apipost(heaVali, nextUrl, params, function(response, body) {
+        if (response.statusCode == 200) {
+            securityTimes[i]++
+                console.log(userName[i][color[i]] + ' : autosurfsecurity:' + body)
+            requestauto(i)
+        }
+    })
 }
 
 function requestauto(i) {
-  var heaauto = {
-      'Host': 'www.otohits.net',
-      'Connection': 'keep-alive',
-      'Content-Length': 0,
-      // 'Cache-Control': 'max-age=0',
-      'Accept': '*/*',
-      'Origin': 'https://www.otohits.net',
-      // 'Upgrade-Insecure-Requests': 1,
-      'X-Requested-With': 'XMLHttpRequest',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      'Referer': 'https://www.otohits.net/account/wfautosurf',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i] ,
-  }
-  var nextUrl="https://www.otohits.net/account/wrautosurfcheck"
-  apipost(heaauto,nextUrl,'',function(response, body){
-    console.log(userName[i]+ ' : got surf url:' + JSON.parse(body).LS)
-    if (body.match(/autosurfsecurity/)) {
-        console.log(userName[i]+" : got securitycheck")
-        console.log(userName[i]+' : body.length:' + body.length + '  validatesecuritying')
-        requestOto(i)
-        // getjs()
-    } else {
-        console.log(userName[i]+' : no securitycheck')
-        console.log(userName[i]+' : autosurfing .... body.length:' + body.length)
-        requestID(i)
+    var heaauto = {
+        'Host': 'www.otohits.net',
+        'Connection': 'keep-alive',
+        'Content-Length': 0,
+        // 'Cache-Control': 'max-age=0',
+        'Accept': '*/*',
+        'Origin': 'https://www.otohits.net',
+        // 'Upgrade-Insecure-Requests': 1,
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Referer': 'https://www.otohits.net/account/wfautosurf',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-  })
-}
-function requestOto(i) {
-  var heaOto = {
-      'Connection': 'keep-alive',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-      'Upgrade-Insecure-Requests': 1,
-      // 'Content-Length': 60,
-      // 'Cache-Control': 'max-age=0',
-      // 'Origin': 'https://www.otohits.net',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      // 'X-Requested-With': 'XMLHttpRequest',
-      // 'Accept': '*/*',
-      'Referer': 'https://www.otohits.net/account/wfautosurf',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
-      'Host': 'www.otohits.net',
-  }
-  var nextUrl="https://www.otohits.net/account/autosurfsecurity"
-  apiget(heaOto,nextUrl,function(response, body){
-    if (response.statusCode == 200) {
-        // console.log('autosurfsecurity:'+body)
-        var arr = JSON.parse('[' + body.match(/oto\.otoc\.s\(.*\)/)[0].slice(11, -1) + ']')
-        console.log(userName[i]+' : has to security')
-        setTimeout(function() {
-            requestVali(i,getParams(arr))
-        }, 10000);
-    }
-  })
-}
-function requestID(i) {
-  var nextUrl= "https://www.otohits.net/account/wrautosurfrender?d=" + new Date().getTime()
-  var heaID = {
-      'Host': 'www.otohits.net',
-      'Connection': 'keep-alive',
-      // 'Content-Length': 0,
-      // 'Cache-Control': 'max-age=0',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-      // 'Origin': 'https://www.otohits.net',
-      'Upgrade-Insecure-Requests': 1,
-      // 'X-Requested-With': 'XMLHttpRequest',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      'Referer': 'https://www.otohits.net/account/wfautosurf',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
-  }
-  apiget(heaID,nextUrl,function(response, body){
-    console.log(userName[i]+' : response.statusCode:' + response.statusCode)
-    console.log(userName[i]+' : security check times:'+securityTimes[i])
-    console.log(userName[i]+' : surf completed')
-    setTimeout(function(){
-        requestauto(i)},5000)
-    
-  })
+    var nextUrl = "https://www.otohits.net/account/wrautosurfcheck"
+    apipost(heaauto, nextUrl, '', function(response, body) {
+        console.log(userName[i][color[i]] + ' : got surf url:' + JSON.parse(body).LS)
+        if (body.match(/autosurfsecurity/)) {
+            console.log(userName[i][color[i]] + " : got securitycheck")
+            console.log(userName[i][color[i]] + ' : body.length:' + body.length + '  validatesecuritying')
+            requestOto(i)
+            // getjs()
+        } else {
+            console.log(userName[i][color[i]] + ' : no securitycheck')
+            console.log(userName[i][color[i]] + ' : autosurfing .... body.length:' + body.length)
+            requestID(i)
+        }
+    })
 }
 
-function getjs(){
-  var nextUrl="https://www.otohits.net/scripts/as2.min.js"
-  var heaID = {
-      'Host': 'www.otohits.net',
-      'Connection': 'keep-alive',
-      // 'Content-Length': 0,
-      // 'Cache-Control': 'max-age=0',
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-      // 'Origin': 'https://www.otohits.net',
-      'Upgrade-Insecure-Requests': 1,
-      // 'X-Requested-With': 'XMLHttpRequest',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      'Referer': 'https://www.otohits.net/account/wfautosurf',
-      'Accept-Encoding': 'gzip,deflate',
-      'Accept-Language': 'zh-CN,zh;q=0.8',
-      'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
-  }
-  apiget(heaID,nextUrl,function(response, body){
-    console.log("got as2.js, body length:"+body.length)
-  })
+function requestOto(i) {
+    var heaOto = {
+        'Connection': 'keep-alive',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Upgrade-Insecure-Requests': 1,
+        // 'Content-Length': 60,
+        // 'Cache-Control': 'max-age=0',
+        // 'Origin': 'https://www.otohits.net',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        // 'X-Requested-With': 'XMLHttpRequest',
+        // 'Accept': '*/*',
+        'Referer': 'https://www.otohits.net/account/wfautosurf',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
+        'Host': 'www.otohits.net',
+    }
+    var nextUrl = "https://www.otohits.net/account/autosurfsecurity"
+    apiget(heaOto, nextUrl, function(response, body) {
+        if (response.statusCode == 200) {
+            // console.log('autosurfsecurity:'+body)
+            var arr = JSON.parse('[' + body.match(/oto\.otoc\.s\(.*\)/)[0].slice(11, -1) + ']')
+            console.log(userName[i][color[i]] + ' : has to security')
+            setTimeout(function() {
+                requestVali(i, getParams(arr))
+            }, 10000);
+        }
+    })
+}
+
+function requestID(i) {
+    var nextUrl = "https://www.otohits.net/account/wrautosurfrender?d=" + new Date().getTime()
+    var heaID = {
+        'Host': 'www.otohits.net',
+        'Connection': 'keep-alive',
+        // 'Content-Length': 0,
+        // 'Cache-Control': 'max-age=0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        // 'Origin': 'https://www.otohits.net',
+        'Upgrade-Insecure-Requests': 1,
+        // 'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Referer': 'https://www.otohits.net/account/wfautosurf',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
+    }
+    apiget(heaID, nextUrl, function(response, body) {
+        console.log(userName[i][color[i]] + ' : response.statusCode:' + response.statusCode)
+        console.log(userName[i][color[i]] + ' : security check times:' + securityTimes[i])
+        console.log(userName[i][color[i]] + ' : surf completed')
+        setTimeout(function() {
+            requestauto(i)
+        }, 5000)
+
+    })
+}
+
+function getjs() {
+    var nextUrl = "https://www.otohits.net/scripts/as2.min.js"
+    var heaID = {
+        'Host': 'www.otohits.net',
+        'Connection': 'keep-alive',
+        // 'Content-Length': 0,
+        // 'Cache-Control': 'max-age=0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        // 'Origin': 'https://www.otohits.net',
+        'Upgrade-Insecure-Requests': 1,
+        // 'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        'Referer': 'https://www.otohits.net/account/wfautosurf',
+        'Accept-Encoding': 'gzip,deflate',
+        'Accept-Language': 'zh-CN,zh;q=0.8',
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
+    }
+    apiget(heaID, nextUrl, function(response, body) {
+        console.log("got as2.js, body length:" + body.length)
+    })
 }
 
 function requestdashboard() {
@@ -302,8 +273,9 @@ function requestdashboard() {
         }
     });
 }
+
 function requestIndex(i) {
-    var nextUrl="https://www.otohits.net/account/login"
+    var nextUrl = "https://www.otohits.net/account/login"
     var heaIndex = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Encoding': 'gzip,deflate',
@@ -319,15 +291,16 @@ function requestIndex(i) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
         // 'X-Requested-With':'XMLHttpRequest',
     }
-    apiget(heaIndex,nextUrl,function(response, body){
-      var reg = /\<input name=\\\"__RequestVerificationToken\\\" type=\\\"hidden\\\" value=\\\"(.{108,108})\\\"/g
-      RequestVerificationToken[i] = JSON.stringify(body).match(reg)[0].split("\\")[5].substr(1)
-      console.log(userName[i]+ " : got RequestVerificationToken:" + RequestVerificationToken[i])
-      requestLogin(i)
+    apiget(heaIndex, nextUrl, function(response, body) {
+        var reg = /\<input name=\\\"__RequestVerificationToken\\\" type=\\\"hidden\\\" value=\\\"(.{108,108})\\\"/g
+        RequestVerificationToken[i] = JSON.stringify(body).match(reg)[0].split("\\")[5].substr(1)
+        console.log(userName[i][color[i]] + " : got RequestVerificationToken:" + RequestVerificationToken[i])
+        requestLogin(i)
     })
 }
+
 function setSessionId(i) {
-    var nextUrl="https://www.otohits.net/"
+    var nextUrl = "https://www.otohits.net/"
     var heaSession = {
         // 'origin':'https://www.otohits.net',
         'Host': 'www.otohits.net',
@@ -343,14 +316,15 @@ function setSessionId(i) {
         // 'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
         // 'If-Modified-Since': timel
     }
-    apiget(heaSession,nextUrl,function(response, body){
-      SessionId[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
-      console.log(userName[i]+ " : got SessionId:" + SessionId[i])
-      setForgery(i)
+    apiget(heaSession, nextUrl, function(response, body) {
+        SessionId[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
+        console.log(userName[i][color[i]] + " : got SessionId:" + SessionId[i])
+        setForgery(i)
     })
 }
+
 function setForgery(i) {
-    var nextUrl="https://www.otohits.net/account/login"
+    var nextUrl = "https://www.otohits.net/account/login"
     var heaForgery = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Encoding': 'gzip,deflate',
@@ -366,14 +340,14 @@ function setForgery(i) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
         // 'X-Requested-With':'XMLHttpRequest',
     }
-    apiget(heaForgery,nextUrl,function(response, body){
-      otohitsforgery[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
-      console.log(userName[i]+" : got otohitsforgery:" + otohitsforgery[i])
-      requestIndex(i)
+    apiget(heaForgery, nextUrl, function(response, body) {
+        otohitsforgery[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
+        console.log(userName[i][color[i]] + " : got otohitsforgery:" + otohitsforgery[i])
+        requestIndex(i)
     })
 }
-for(var i=0,len=userName.length;i<len;i++){
+for (var i = 0, len = userName.length; i < len; i++) {
+    securityTimes[i] = 0
     setSessionId(i)
-    securityTimes[i]=0
+    for (var j = 0; j < 99; j++) {}
 }
-
