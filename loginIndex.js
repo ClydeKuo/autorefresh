@@ -12,15 +12,16 @@ var SessionId = []
 var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
-var userName = ['test13669', 'test13670', 'test13671','test13672']
+var userName = ['test13669', 'test13670', 'test13671', 'test13672']
+
 function sleep(numberMillis) {
-var now = new Date();
-var exitTime = now.getTime() + numberMillis*1000;
-while (true) {
-now = new Date();
-if (now.getTime() > exitTime)
-return;
-}
+    var now = new Date();
+    var exitTime = now.getTime() + numberMillis * 1000;
+    while (true) {
+        now = new Date();
+        if (now.getTime() > exitTime)
+            return;
+    }
 }
 //获取所需时间格式
 function timel() {
@@ -355,6 +356,14 @@ function setForgery(i) {
         requestIndex(i)
     })
 }
+var text = new Date() + " running"
+fs.open("test1.vue", "a", 0644, function(e, fd) {
+    if (e) throw e;
+    fs.write(fd, text, function(e) {
+        if (e) throw e;
+        fs.closeSync(fd);
+    })
+});
 for (var i = 0, len = userName.length; i < len; i++) {
     securityTimes[i] = 0
     setSessionId(i)

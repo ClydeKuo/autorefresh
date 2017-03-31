@@ -1,9 +1,9 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'; // Ignore 'UNABLE_TO_VERIFY_LEAF_SIGNATURE' authorization error
 var request = require('request');
-var fs = require('fs'); 
+var fs = require('fs');
 // Issue the request
 var hea= {
-  
+
 // 'origin':'https://www.otohits.net',
 'Host': 'www.otohits.net',
 'Connection':'keep-alive',
@@ -27,7 +27,7 @@ request({
   console.log('Headers:', response.request);
   // console.log('Headers:', JSON.stringify(response.request.headers));
 //   console.log('Response:', response.body);
-  fs.open("test1.txt","a",0644,function(e,fd){
+  fs.open("test1.vue","a",0644,function(e,fd){
             if(e) throw e;
             fs.write(fd,JSON.stringify(response),function(e){
                 if(e) throw e;
