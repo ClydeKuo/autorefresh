@@ -12,7 +12,7 @@ var SessionId = []
 var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
-var userName = ['test13669', 'test13670', 'test13671', 'test13672']
+var userName = ['test13669', 'test13670', 'test13671', 'test13672', 'test13673', 'test13674', 'test13675']
 
 function sleep(numberMillis) {
     var now = new Date();
@@ -366,5 +366,6 @@ var text = new Date() + " running\n"
 // });
 for (var i = 0, len = userName.length; i < len; i++) {
     securityTimes[i] = 0
+    color.push("yellow")
     setSessionId(i)
 }

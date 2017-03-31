@@ -11,5 +11,6 @@
 // test()
 
 var colors = require('colors');
-var color = ['yellow', 'cyan', 'magenta', 'red', 'green', 'blue', 'rainbow', 'zebra']
-console.log('ddd'[color[i]])
+var color = ['pink','yellow', 'cyan', 'magenta', 'red', 'green', 'blue', 'rainbow', 'zebra']
+console.log('ddd'[color[0]])
+// console.log('dddds'.'#d86678')
