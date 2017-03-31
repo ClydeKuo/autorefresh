@@ -13,6 +13,15 @@ var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
 var userName = ['test13669', 'test13670', 'test13671']
+function sleep(numberMillis) {
+var now = new Date();
+var exitTime = now.getTime() + numberMillis*1000;
+while (true) {
+now = new Date();
+if (now.getTime() > exitTime)
+return;
+}
+}
 //获取所需时间格式
 function timel() {
     var timeReg = /(AM)|(PM)/
@@ -349,5 +358,4 @@ function setForgery(i) {
 for (var i = 0, len = userName.length; i < len; i++) {
     securityTimes[i] = 0
     setSessionId(i)
-    for (var j = 0; j < 99; j++) {}
 }
