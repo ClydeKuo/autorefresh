@@ -356,14 +356,14 @@ function setForgery(i) {
         requestIndex(i)
     })
 }
-var text = new Date() + " running"
-fs.open("test1.vue", "a", 0644, function(e, fd) {
-    if (e) throw e;
-    fs.write(fd, text, function(e) {
-        if (e) throw e;
-        fs.closeSync(fd);
-    })
-});
+var text = new Date() + " running\n"
+// fs.open("test1.vue", "a", 0644, function(e, fd) {
+//     if (e) throw e;
+//     fs.write(fd, text, function(e) {
+//         if (e) throw e;
+//         fs.closeSync(fd);
+//     })
+// });
 for (var i = 0, len = userName.length; i < len; i++) {
     securityTimes[i] = 0
     setSessionId(i)
