@@ -12,8 +12,8 @@ var SessionId = []
 var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
-var userName = ['test13669', 'test13670', 'test13671', 'test13672', 'test13673', 'test13674', 'test13675']
-
+var userName = ['test13669', 'test13670', 'test13671', 'test13672', 'test13673', 'test13674', 'test13675' ,'test13676']
+ // userName = ['test13669']
 function sleep(numberMillis) {
     var now = new Date();
     var exitTime = now.getTime() + numberMillis * 1000;
@@ -59,7 +59,7 @@ function apiget(header, url, callback) {
         gzip: true,
         url: url,
         followRedirect: false,
-        // proxy: proxy
+        proxy: proxy
     }, function(error, response, body) {
         if (error) {
             console.error(error)
@@ -73,26 +73,28 @@ function apiget(header, url, callback) {
     req.end()
 }
 
-function apipost(header, url, body, callback) {
-    var req2=request({
+function apipost(header, url, body1, callback) {
+    var req2=request.post({
         headers: header,
-        method: "POST",
+        // method: "POST",
         gzip: true,
         url: url,
-        body: body,
+        body: body1,
         // proxy: proxy,
         followRedirect: false,
     }, function(error, response, body) {
         if (error) {
+            console.log(body1)
+            console.log("error")
             console.log(error)
-            setTimeout(function() {
-                apipost(header, url, body, callback)
-            }, 10000)
+            // setTimeout(function() {
+            //     apipost(header, url, body, callback)
+            // }, 10000)
         } else {
             callback(response, body)
         }
     });
-    req2.end()
+    // req2.end()
 }
 
 
@@ -237,13 +239,12 @@ function requestID(i) {
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
     apiget(heaID, nextUrl, function(response, body) {
-      getjs(i)
         console.log(userName[i][color[i]] + ' : response.statusCode:' + response.statusCode)
         console.log(userName[i][color[i]] + ' : security check times:' + securityTimes[i])
         console.log(userName[i][color[i]] + ' : surf completed')
         setTimeout(function() {
             requestauto(i)
-        }, 300000)
+        }, 10000)
 
     })
 }
