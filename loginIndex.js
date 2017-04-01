@@ -53,13 +53,13 @@ if (process.platform == 'linux') {
 }
 
 function apiget(header, url, callback) {
-    request({
+    var req=request.get({
         headers: header,
-        method: "GET",
+        // method: "GET",
         gzip: true,
         url: url,
         followRedirect: false,
-        proxy: proxy
+        // proxy: proxy
     }, function(error, response, body) {
         if (error) {
             console.error(error)
@@ -70,16 +70,17 @@ function apiget(header, url, callback) {
             callback(response, body)
         }
     });
+    req.end()
 }
 
 function apipost(header, url, body, callback) {
-    request({
+    var req2=request({
         headers: header,
         method: "POST",
         gzip: true,
         url: url,
         body: body,
-        proxy: proxy,
+        // proxy: proxy,
         followRedirect: false,
     }, function(error, response, body) {
         if (error) {
@@ -91,6 +92,7 @@ function apipost(header, url, body, callback) {
             callback(response, body)
         }
     });
+    req2.end()
 }
 
 
@@ -235,17 +237,18 @@ function requestID(i) {
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
     apiget(heaID, nextUrl, function(response, body) {
+      getjs(i)
         console.log(userName[i][color[i]] + ' : response.statusCode:' + response.statusCode)
         console.log(userName[i][color[i]] + ' : security check times:' + securityTimes[i])
         console.log(userName[i][color[i]] + ' : surf completed')
         setTimeout(function() {
             requestauto(i)
-        }, 10000)
+        }, 300000)
 
     })
 }
 
-function getjs() {
+function getjs(i) {
     var nextUrl = "https://www.otohits.net/scripts/as2.min.js"
     var heaID = {
         'Host': 'www.otohits.net',
@@ -261,9 +264,9 @@ function getjs() {
         'Referer': 'https://www.otohits.net/account/wfautosurf',
         'Accept-Encoding': 'gzip,deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8',
-        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
+        'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-    apiget(heaID, nextUrl, function(response, body) {
+    apiget(heaID[i], nextUrl, function(response, body) {
         console.log("got as2.js, body length:" + body.length)
     })
 }
@@ -312,19 +315,13 @@ function requestIndex(i) {
 function setSessionId(i) {
     var nextUrl = "https://www.otohits.net/"
     var heaSession = {
-        // 'origin':'https://www.otohits.net',
         'Host': 'www.otohits.net',
         'Connection': 'keep-alive',
-        // 'Cache-Control': 'max-age=0',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Upgrade-Insecure-Requests': 1,
-        // 'X-Requested-With':'XMLHttpRequest',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-        // 'referer': 'https://www.otohits.net/',
         'Accept-Encoding': 'gzip,deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8',
-        // 'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId + '; otohitsforgery=' + otohitsforgery,
-        // 'If-Modified-Since': timel
     }
     apiget(heaSession, nextUrl, function(response, body) {
         SessionId[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
@@ -369,3 +366,4 @@ for (var i = 0, len = userName.length; i < len; i++) {
     color.push("yellow")
     setSessionId(i)
 }
+// setSessionId(0)
