@@ -62,18 +62,18 @@ function apiget(func,header, url, callback) {
         proxy: proxy
     }, function(error, response, body) {
         if (error) {
-            console.error((func+' got error: \n'+error).red)
+            console.error(userName[i][color[i]]+(' '+func+' got error: \n'+error).red)
             setTimeout(function() {
-                console.log('connect again')
+                console.log(userName[i][color[i]]+'connect again')
                 apiget(func,header, url, callback)
             }, 10000)
         } else {
             try{
                 callback(response, body)
             }catch(e){
-                console.log(e.red)
+                console.error(userName[i][color[i]]+(' '+func+' got error: \n'+e).red)
                 setTimeout(function() {
-                    console.log('connect again')
+                    console.log(userName[i][color[i]]+'connect again')
                     apiget(func,header, url, callback)
                 }, 10000)
             }
@@ -94,18 +94,18 @@ function apipost(func,header, url, body1, callback) {
         followRedirect: false,
     }, function(error, response, body) {
         if (error) {
-            console.error((func+' got error: \n'+error).red)
+            console.error(userName[i][color[i]]+(' '+func+' got error: \n'+error).red)
             setTimeout(function() {
-                console.log('connect again')
+                console.log(userName[i][color[i]]+'connect again')
                 apipost(func,header, url, body, callback)
             }, 10000)
         } else {
             try{
                 callback(response, body)
             }catch(e){
-                console.log(e.red)
+                console.error(userName[i][color[i]]+(' '+func+' got error: \n'+e).red)
                 setTimeout(function() {
-                    console.log('connect again')
+                    console.log(userName[i][color[i]]+'connect again')
                     apipost(func,header, url, callback)
                 }, 10000)
             }
@@ -379,9 +379,17 @@ var text = new Date() + " running\n"
 //         fs.closeSync(fd);
 //     })
 // });
+
+function delay(i){
+
+        setTimeout(function(){
+            setSessionId(i)
+        },i*1000)
+}
+
 for (var i = 0, len = userName.length; i < len; i++) {
     securityTimes[i] = 0
     color.push("yellow")
-    setSessionId(i)
+    delay(i)
 }
 // setSessionId(0)
