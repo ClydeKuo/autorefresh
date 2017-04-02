@@ -5,3 +5,9 @@ var child = execFile('node', ['--version'],function(error, stdout, stderr){
   }
   console.log(stdout);
 });
+var child = execFile('ps', ['-ef|grep node'],function(error, stdout, stderr){
+  if (error) {
+    throw error;
+  }
+  console.log(stdout);
+});
