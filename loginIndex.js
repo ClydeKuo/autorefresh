@@ -52,7 +52,7 @@ if (process.platform == 'linux') {
     proxy = ""
 }
 
-function apiget(header, url, callback) {
+function apiget(func,header, url, callback) {
     var req=request.get({
         headers: header,
         // method: "GET",
@@ -62,18 +62,28 @@ function apiget(header, url, callback) {
         proxy: proxy
     }, function(error, response, body) {
         if (error) {
-            console.error(error)
+            console.error((func+' got error: \n'+error).red)
             setTimeout(function() {
-                apiget(header, url, callback)
+                console.log('connect again')
+                apiget(func,header, url, callback)
             }, 10000)
         } else {
-            callback(response, body)
+            try{
+                callback(response, body)
+            }catch(e){
+                console.log(e.red)
+                setTimeout(function() {
+                    console.log('connect again')
+                    apiget(func,header, url, callback)
+                }, 10000)
+            }
+
         }
     });
     req.end()
 }
 
-function apipost(header, url, body1, callback) {
+function apipost(func,header, url, body1, callback) {
     var req2=request.post({
         headers: header,
         // method: "POST",
@@ -84,14 +94,21 @@ function apipost(header, url, body1, callback) {
         followRedirect: false,
     }, function(error, response, body) {
         if (error) {
-            console.log(body1)
-            console.log("error")
-            console.log(error)
-            // setTimeout(function() {
-            //     apipost(header, url, body, callback)
-            // }, 10000)
+            console.error((func+' got error: \n'+error).red)
+            setTimeout(function() {
+                console.log('connect again')
+                apipost(func,header, url, body, callback)
+            }, 10000)
         } else {
-            callback(response, body)
+            try{
+                callback(response, body)
+            }catch(e){
+                console.log(e.red)
+                setTimeout(function() {
+                    console.log('connect again')
+                    apipost(func,header, url, callback)
+                }, 10000)
+            }
         }
     });
     // req2.end()
@@ -116,7 +133,7 @@ function requestLogin(i) {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-    apipost(heaLogin, nextUrl, body, function(response, body) {
+    apipost('requestLogin',heaLogin, nextUrl, body, function(response, body) {
         if (response.statusCode == 200) {
             console.log(userName[i][color[i]] + ' : too many times:' + (body == 'Too many attempt of logins. Throttling started. You will be able to login in 15min...'))
             setTimeout(function() {
@@ -147,7 +164,7 @@ function requestVali(i, params) {
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
     var nextUrl = "https://www.otohits.net/account/validatesecurity"
-    apipost(heaVali, nextUrl, params, function(response, body) {
+    apipost('requestVali',heaVali, nextUrl, params, function(response, body) {
         if (response.statusCode == 200) {
             securityTimes[i]++
                 console.log(userName[i][color[i]] + ' : autosurfsecurity:' + body)
@@ -174,7 +191,7 @@ function requestauto(i) {
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
     var nextUrl = "https://www.otohits.net/account/wrautosurfcheck"
-    apipost(heaauto, nextUrl, '', function(response, body) {
+    apipost('requestauto',heaauto, nextUrl, '', function(response, body) {
         console.log(userName[i][color[i]] + ' : got surf url:' + JSON.parse(body).LS)
         if (body.match(/autosurfsecurity/)) {
             console.log(userName[i][color[i]] + " : got securitycheck")
@@ -208,7 +225,7 @@ function requestOto(i) {
         'Host': 'www.otohits.net',
     }
     var nextUrl = "https://www.otohits.net/account/autosurfsecurity"
-    apiget(heaOto, nextUrl, function(response, body) {
+    apiget('requestOto',heaOto, nextUrl, function(response, body) {
         if (response.statusCode == 200) {
             // console.log('autosurfsecurity:'+body)
             var arr = JSON.parse('[' + body.match(/oto\.otoc\.s\(.*\)/)[0].slice(11, -1) + ']')
@@ -238,7 +255,7 @@ function requestID(i) {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-    apiget(heaID, nextUrl, function(response, body) {
+    apiget('requestID',heaID, nextUrl, function(response, body) {
         console.log(userName[i][color[i]] + ' : response.statusCode:' + response.statusCode)
         console.log(userName[i][color[i]] + ' : security check times:' + securityTimes[i])
         console.log(userName[i][color[i]] + ' : surf completed')
@@ -267,7 +284,7 @@ function getjs(i) {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
-    apiget(heaID[i], nextUrl, function(response, body) {
+    apiget('getjs',heaID[i], nextUrl, function(response, body) {
         console.log("got as2.js, body length:" + body.length)
     })
 }
@@ -305,7 +322,7 @@ function requestIndex(i) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
         // 'X-Requested-With':'XMLHttpRequest',
     }
-    apiget(heaIndex, nextUrl, function(response, body) {
+    apiget('requestIndex',heaIndex, nextUrl, function(response, body) {
         var reg = /\<input name=\\\"__RequestVerificationToken\\\" type=\\\"hidden\\\" value=\\\"(.{108,108})\\\"/g
         RequestVerificationToken[i] = JSON.stringify(body).match(reg)[0].split("\\")[5].substr(1)
         console.log(userName[i][color[i]] + " : got RequestVerificationToken:" + RequestVerificationToken[i])
@@ -324,7 +341,7 @@ function setSessionId(i) {
         'Accept-Encoding': 'gzip,deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8',
     }
-    apiget(heaSession, nextUrl, function(response, body) {
+    apiget('setSessionId',heaSession, nextUrl, function(response, body) {
         SessionId[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
         console.log(userName[i][color[i]] + " : got SessionId:" + SessionId[i])
         setForgery(i)
@@ -348,7 +365,7 @@ function setForgery(i) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
         // 'X-Requested-With':'XMLHttpRequest',
     }
-    apiget(heaForgery, nextUrl, function(response, body) {
+    apiget('setForgery',heaForgery, nextUrl, function(response, body) {
         otohitsforgery[i] = response.headers["set-cookie"][0].split(";")[0].split("=")[1]
         console.log(userName[i][color[i]] + " : got otohitsforgery:" + otohitsforgery[i])
         requestIndex(i)
