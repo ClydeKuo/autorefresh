@@ -15,12 +15,12 @@ ps.stdout.on('data', function(data){
 });
 
 ps.stderr.on('data', function(data){
-  console.log(`ps stderr: ${data}`);
+  console.log('ps stderr: '+data);
 });
 
 ps.on('close', (code){
   if (code !== 0) {
-    console.log(`ps 进程退出码：${code}`);
+    console.log('ps 进程退出码：'+code);
   }
   grep.stdin.end();
 });
@@ -30,11 +30,11 @@ grep.stdout.on('data', function(data){
 });
 
 grep.stderr.on('data', function(data){
-  console.log(`grep stderr: ${data}`);
+  console.log('grep stderr: '+data);
 });
 
 grep.on('close', (code){
   if (code !== 0) {
-    console.log(`grep 进程退出码：${code}`);
+    console.log('grep 进程退出码：'+code);
   }
 });
