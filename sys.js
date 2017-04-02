@@ -10,30 +10,30 @@ var child = execFile('node', ['--version'],function(error, stdout, stderr){
 });
 
 var grep = spawn('grep', ['node']);
-ps.stdout.on('data', (data) => {
+ps.stdout.on('data', function(data){
   grep.stdin.write(data);
 });
 
-ps.stderr.on('data', (data) => {
+ps.stderr.on('data', function(data){
   console.log(`ps stderr: ${data}`);
 });
 
-ps.on('close', (code) => {
+ps.on('close', (code){
   if (code !== 0) {
     console.log(`ps 进程退出码：${code}`);
   }
   grep.stdin.end();
 });
 
-grep.stdout.on('data', (data) => {
+grep.stdout.on('data', function(data){
   console.log(data.toString());
 });
 
-grep.stderr.on('data', (data) => {
+grep.stderr.on('data', function(data){
   console.log(`grep stderr: ${data}`);
 });
 
-grep.on('close', (code) => {
+grep.on('close', (code){
   if (code !== 0) {
     console.log(`grep 进程退出码：${code}`);
   }
