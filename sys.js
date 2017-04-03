@@ -17,16 +17,20 @@ ps.stdout.on('data', function(data){
 // ps.stderr.on('data', function(data){
 //   console.log('ps stderr: '+data);
 // });
-
+// nohup node /usr/workstation/autorefresh/loginIndex.js >/dev/null 2>&1 &
 ps.on('close', function(code){
   if (code !== 0) {
-    console.log('ps 进程退出码：'+code);
+    // console.log('ps 进程退出码：'+code);
   }
   grep.stdin.end();
 });
 
 grep.stdout.on('data', function(data){
-  console.log(data.toString().match(/autorefresh/));
+    var temp=data.toString().match(/autorefresh\/loginIndex/)
+  console.log(temp);
+  if(!temp){
+
+  }
 });
 
 // grep.stderr.on('data', function(data){
@@ -35,6 +39,6 @@ grep.stdout.on('data', function(data){
 
 grep.on('close', function(code){
   if (code !== 0) {
-    console.log('grep 进程退出码：'+code);
+    // console.log('grep 进程退出码：'+code);
   }
 });
