@@ -12,7 +12,7 @@ var SessionId = []
 var otohitsforgery = []
 var securityTimes = []
 var color = ['yellow', 'cyan', 'magenta', 'green', 'blue', 'rainbow', 'zebra', 'red']
-var userName = ['test13669', 'test13670', 'test13671', 'test13672', 'test13673', 'test13674', 'test13675']
+var userName = ['test13669', 'test13670', 'test13671', 'test13672', 'test13673', 'test13674', 'test13675', 'test13676']
 
 function sleep(numberMillis) {
     var now = new Date();
@@ -237,7 +237,7 @@ function requestID(i) {
         'Cookie': 'WW=lang=en; ASP.NET_SessionId=' + SessionId[i] + '; otohitsforgery=' + otohitsforgery[i],
     }
     apiget(heaID, nextUrl, function(response, body) {
-      getjs(i)
+      // getjs(i)
         console.log(userName[i][color[i]] + ' : response.statusCode:' + response.statusCode)
         console.log(userName[i][color[i]] + ' : security check times:' + securityTimes[i])
         console.log(userName[i][color[i]] + ' : surf completed')
