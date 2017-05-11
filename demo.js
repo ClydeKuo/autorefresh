@@ -52,7 +52,7 @@ getProxyList().then(function (proxyList) {
 
     var targetOptions = {
         method: 'GET',
-        url: 'http://www.discoveryland.tk/',
+        url: 'http://ip.chinaz.com/getip.aspx',
         timeout: 8000,
         encoding: null,
     };
